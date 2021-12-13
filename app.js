@@ -314,6 +314,6 @@ app.get("/signout", function(req, res){
   res.redirect("/");
 })
 
-app.listen(port, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log("Server running on Port 3000");
 })
