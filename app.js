@@ -12,6 +12,11 @@ const _ = require("lodash")
 
 const app = express();
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
 var loginStatus = 0;
 app.use(express.static(__dirname + '/public'));
 app.set("view engine", "ejs");
@@ -46,7 +51,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session())
-mongoose.connect("mongodb://127.0.0.1:27017/resdineDB");
+mongoose.connect("mongodb+srv://admin-om:Password@cluster0.0vjgs.mongodb.net/ResDine");
 
 const orderSchema = new mongoose.Schema({
   resName: String,
@@ -68,7 +73,7 @@ const userSchema = new mongoose.Schema({
   orders: [orderSchema]
 }, {strict: false});
 
-const cityRestuarantSchema = new mongoose.Schema({
+const cityRestaurantSchema = new mongoose.Schema({
   city : String,
   name: String,
   address :String,
@@ -86,7 +91,7 @@ userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 const User = mongoose.model("User", userSchema);
-const cityRestuarant = mongoose.model("cityRestuarant", cityRestuarantSchema);
+const cityRestaurant = mongoose.model("cityRestaurant", cityRestaurantSchema);
 
 passport.use(User.createStrategy());
 
@@ -106,7 +111,6 @@ passport.use(new GoogleStrategy({
   callbackURL: "http://localhost:3000/auth/google/resdine",
   },
   function (accessToken, refreshToken, profile, cb) {
-    // console.log(profile)
     User.findOrCreate({ googleId: profile.id, username: profile.emails[0].value, name: profile.displayName, photourl: profile.photos[0].value }, function (err, user) {
       return cb(err, user);
     });
@@ -202,7 +206,7 @@ app.post("/selectcity", function (req, res) {
 app.get("/restaurantcity/:city", function(req, res){
   const cityName = _.startCase(_.toLower(req.params.city));
 
-  cityRestuarant.find({city : cityName},function(err, foundRestaurants){
+  cityRestaurant.find({city : cityName},function(err, foundRestaurants){
     if(err){
       console(err);
     }else{
@@ -232,7 +236,7 @@ var savedres;
 app.get("/restaurantpage/:name",function(req,res){
     const restaurantName = req.params.name;
 
-    cityRestuarant.findOne({name : restaurantName}, function(err, foundRestaurant){
+    cityRestaurant.findOne({name : restaurantName}, function(err, foundRestaurant){
       if (foundRestaurant != null){
         savedres = foundRestaurant;
       }
@@ -310,6 +314,6 @@ app.get("/signout", function(req, res){
   res.redirect("/");
 })
 
-app.listen(3000, function () {
+app.listen(port, function () {
   console.log("Server running on Port 3000");
 })
