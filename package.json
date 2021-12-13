@@ -4,7 +4,7 @@
   "main": "app.js",
   "start": "HTTPS=true react-scripts start",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+   "start": "node app.js"
   },
   "author": "omkmorendha",
   "license": "ISC",
