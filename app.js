@@ -11,11 +11,7 @@ const findOrCreate = require('mongoose-findorcreate');
 const _ = require("lodash")
 
 const app = express();
-
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
+const PORT = process.env.PORT || '3000';
 
 var loginStatus = 0;
 app.use(express.static(__dirname + '/public'));
@@ -314,6 +310,6 @@ app.get("/signout", function(req, res){
   res.redirect("/");
 })
 
-app.listen(process.env.PORT || 3000, function () {
+app.listen(PORT, function () {
   console.log("Server running on Port 3000");
 })
