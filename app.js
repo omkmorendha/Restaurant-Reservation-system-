@@ -47,7 +47,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session())
-mongoose.connect("mongodb+srv://admin-om:Password@cluster0.0vjgs.mongodb.net/ResDine");
+mongoose.connect("mongodb+srv://" + ATLAS_USER_ID + ":" + ATLAS_USER_PASSWORD + "@cluster0.0vjgs.mongodb.net/ResDine");
 
 const orderSchema = new mongoose.Schema({
   resName: String,
