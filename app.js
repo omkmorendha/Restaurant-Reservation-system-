@@ -9,11 +9,9 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 const _ = require("lodash")
-
 const app = express();
 const PORT = process.env.PORT || '3000';
 
-var loginStatus = 0;
 app.use(express.static(__dirname + '/public'));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
@@ -23,7 +21,7 @@ app.use(bodyParser.urlencoded({
 function navRender(page, req, res){
   if(req.isAuthenticated()){
     res.render(page, {
-      loginStatus: loginStatus,
+      loginStatus: 1,
       profileName: req.user.name,
       profilePic: req.user.photourl,
       user: req.user
@@ -31,7 +29,7 @@ function navRender(page, req, res){
   }
   else{
     res.render(page, {
-      loginStatus: loginStatus,
+      loginStatus: 0,
       profileName: 0,
       profilePic: 0,
       user: 0
@@ -138,7 +136,6 @@ app.get('/auth/google', passport.authenticate('google', { scope: ["email", "prof
 app.get('/auth/google/resdine',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-    loginStatus = 1;
 
     if(req.user.phone === undefined){
       res.redirect("/additional");
@@ -165,7 +162,6 @@ app.post("/signup", function (req, res) {
       res.redirect("/signup");
     } else {
       passport.authenticate("local")(req, res, function () {
-        loginStatus = 1;
         res.redirect("/selectcity")
       })
     }
@@ -185,7 +181,6 @@ app.post("/login", function (req, res) {
     if (err) { console.log(err) }
     else {
       passport.authenticate("local")(req, res, function () {
-        loginStatus = 1;
         res.redirect("/selectcity")
       })
     }
@@ -209,7 +204,7 @@ app.get("/restaurantcity/:city", function(req, res){
     }else{
       if(req.isAuthenticated()){
         res.render("restaurantcity", {
-          loginStatus: loginStatus,
+          loginStatus: 1,
           profilePic: req.user.photourl,
           profileName: req.user.name,
           city: cityName,
@@ -218,7 +213,7 @@ app.get("/restaurantcity/:city", function(req, res){
       }
       else{
         res.render("restaurantcity", {
-          loginStatus: loginStatus,
+          loginStatus: 0,
           profilePic: 0,
           profileName: 0,
           city: cityName,
@@ -243,7 +238,7 @@ app.get("/restaurantpage/:name",function(req,res){
       }else{
         if(req.isAuthenticated()){
           res.render("restaurantpage", {
-            loginStatus: loginStatus,
+            loginStatus: 1,
             profilePic: req.user.photourl,
             profileName: req.user.name,
             restaurant : savedres
@@ -251,7 +246,7 @@ app.get("/restaurantpage/:name",function(req,res){
         }
         else{
           res.render("restaurantpage", {
-            loginStatus: loginStatus,
+            loginStatus: 0,
             profilePic: 0,
             profileName: 0,
             restaurant : savedres
@@ -307,7 +302,6 @@ app.post("/payment/:resName", function(req, res){
 
 app.get("/signout", function(req, res){
   req.logout();
-  loginStatus = 0;
   res.redirect("/");
 })
 
