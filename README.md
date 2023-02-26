@@ -3,7 +3,7 @@
 ---
 ### [Report-Link](https://github.com/prakash02dec/Restaurant-Reservation-system-/blob/main/REPORT.pdf) 
 ### Deployment-Link
-#### AWS  [[http://ec2-15-206-100-143.ap-south-1.compute.amazonaws.com/]([http://52.66.205.99:3000/)](http://ec2-15-206-100-143.ap-south-1.compute.amazonaws.com/](http://52.66.205.99:3000/))         
+#### AWS  [http://ec2-15-206-100-143.ap-south-1.compute.amazonaws.com/](http://52.66.205.99:3000/)         
 ---
 ## Team Members
 |Name|Email|Institute ID|    |    
